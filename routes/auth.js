@@ -13,7 +13,7 @@ router.post("/login", loginController)
 router.get('/get-allusers',jwtVerification,getUsers)
 
 // get user routes
-router.get("/account", jwtVerification, getUserAccount)
+router.get("/account/:id", jwtVerification, getUserAccount)
 
 
 // get Registered Tournaments

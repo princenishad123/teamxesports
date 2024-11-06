@@ -40,7 +40,7 @@ export const signUpController = async (req, res) => {
         
         
     } catch (error) {
-       
+       res.send(error)
     }
     
 }
@@ -81,6 +81,7 @@ export const loginController = async (req, res) => {
         res.status(200).json({
             message: "Login success",
             token: token,
+            userId: isUser.id,
             cookie:"Cookie has been send"
             
         })
@@ -120,9 +121,9 @@ export const getUsers = async (req, res) => {
 // get user account
 export const getUserAccount = async (req, res) => {
 
-    const userId = req.user.userId
+    const { id } = req.params;
   try {
-      const userData = await userSchema.findById(userId);
+      const userData = await userSchema.findById(id);
       if (!userData) res.json({ message: "User not Found" });
 
       const { name,email,wallet,tournaments,isAdmin } = userData;
