@@ -6,7 +6,7 @@ dotenv.config();
 
 const DB_URL = process.env.DATABASE_URL;
 
-console.log("Connecting to:", DB_URL);
+
 
 const databaseConnect = () => {
  mongoose.connect(DB_URL, {

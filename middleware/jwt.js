@@ -12,7 +12,7 @@ const jwtVerification = (req, res, next) => {
         next()
 
     } catch (error) {
-        console.log(error)
+        console.log(error.message)
         res.status(400).json({
             status:400,
             message: "invalid Token",

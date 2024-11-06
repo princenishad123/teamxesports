@@ -89,7 +89,7 @@ export const loginController = async (req, res) => {
         
     } catch (error) {
     
-        res.send(error)
+        res.send(error.message)
         
     }
     
