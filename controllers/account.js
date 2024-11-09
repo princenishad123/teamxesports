@@ -10,13 +10,13 @@ export const signUpController = async (req, res) => {
     try {
   
         // simple validation
-        if(!req.body.name) res.json({message: "Name is Reqiured"})
-        if(!req.body.email) res.json({message: "Email is Required"})
-        if (!req.body.password) res.json({message: "Password is Reqiured"})
+        if(!req.body.name) return res.json({message: "Name is Reqiured"})
+        if(!req.body.email) return res.json({message: "Email is Required"})
+        if (!req.body.password) return res.json({message: "Password is Reqiured"})
         
         // check email 
         const isEmail = await userSchema.findOne({ email });
-        if (isEmail) res.status(400).json({
+        if (isEmail) return res.status(400).json({
             message: "Email Already Registred",
             code:false
         })
@@ -30,7 +30,7 @@ export const signUpController = async (req, res) => {
         const user = new userSchema(userData);
         const result = await user.save();
 
-        res.status(200).json({
+       return res.status(200).json({
             message: "Sign success login Now",
             result
         })
@@ -47,54 +47,44 @@ export const signUpController = async (req, res) => {
 
 //  Login user controller
 export const loginController = async (req, res) => {
+  
     const { email, password } = req.body;
- 
-
     try {
-
-        // simple validation 
-      if(!email) res.json({message:"Email is required"})
-        if (!password) res.json({message:"password is required"})
+        // Simple validation
+        if (!email) return res.json({ message: "Email is required" });
+        if (!password) return res.json({ message: "Password is required" });
         
-        // check email register
-        const isUser = await userSchema.findOne({ email })
+        // Check if the email is registered
+        const isUser = await userSchema.findOne({ email });
         
-        if (!isUser) res.json({message:"Invalid email or password"})
+        if (!isUser) return res.json({ message: "Invalid email or password" });
         
-        // check password
-      
-     
-        const isMatch = await comparePassword(password, isUser.password)
-        if (!isMatch) res.json({ message: "Invalid email or password" })
+        // Check password
+        const isMatch = await comparePassword(password, isUser.password);
+        if (!isMatch) return res.json({ message: "Invalid email or password" });
         
-        // create payload
+        // Create payload
         const payload = {
             userId: isUser.id,
-            email:isUser.email
-        }
+            email: isUser.email
+        };
 
-        //generate token
+        // Generate token
         const token = await generateToken(payload);
 
-       
-
-        res.status(200).json({
-            message: "Login success",
+        return res.status(200).json({
+            message: "Login successful",
             token: token,
-            userId: isUser.id,
-            cookie:"Cookie has been send"
-            
-        })
+            userId: isUser.id,  
+        });
 
-        
-        
     } catch (error) {
-    
-        res.send(error.message)
-        
+        console.error(error);
+        return res.status(500).json({ message: "Server error" });
     }
-    
-}
+};
+
+
 
 
 // get all users
@@ -116,6 +106,66 @@ export const getUsers = async (req, res) => {
     }
     
     
+}
+
+// update user data
+
+export const updateUser = async (req,res) => {
+    try {
+        const { id, email, name, wallet } = req.body
+        
+        const user = await userSchema.updateOne({ _id: id }, {
+            $set: {
+                email,
+                name,
+                wallet
+            }
+        });
+
+        if (!user) return res.status(200).json({
+            message: "user not found"
+        });
+
+        return res.status(200).json({
+            message: "updated",
+            status:"ok"
+        })
+
+
+        
+    } catch (error) {
+        return res.json({
+            message: "server error",
+            error
+
+        })
+    }
+}
+
+
+// delete User data
+
+export const deleteUser = async (req, res) => {
+      const { _id } = req.body
+    try {
+      
+      
+        if (!_id) return res.json({ message: "Id required" })
+        
+        const del = await userSchema.findByIdAndDelete({ _id });
+
+       return res.status(200).json({
+            message: "user deleted",
+            del
+      })
+        
+    } catch (error) {
+          return res.json({
+            message: "server error",
+            error
+
+        })
+    }
 }
 
 // get user account

@@ -183,7 +183,7 @@ export const registerTeam = async (req, res) => {
       
         if (user.wallet < tournament.entryFee) {
             return res.json({
-                message:"inffluince Blanace"
+                message:"influences Blanace"
             })
         } 
 

@@ -10,8 +10,8 @@ export const tournamentSchema = new mongoose.Schema({
     ref: 'users',
     required:true
   },  
-  description: {
-    type: String
+  winner: {
+    type: Number
   },
   roomId: {
     type :String,

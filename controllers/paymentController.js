@@ -103,9 +103,12 @@ export const withdraw = async (req,res) => {
     const id = req.user.userId
     const { amount,upi,type  } = req.body;
 
-    
+    const userData = await userSchema.findById({ _id: id })
 
-    const userData = await userSchema.findById({_id:id})
+    if (userData.wallet < Number(amount)) {
+    return  res.json({ message: "influences balance" })
+      
+    } 
      
     const ref = new withdrawSchema({
       userId: id,
@@ -113,14 +116,15 @@ export const withdraw = async (req,res) => {
       upi,
       name: userData.name,
       email: userData.email,
-      type
+      type,
+ 
  
     })
 
     if(!id) res.send("id is required !")
     if (!userData) res.send("user not found");
 
-    if (userData.wallet < amount) res.send("Infuince balance");
+    // if (userData.wallet < amount) res.send("Infuince balance");
 
     userData.wallet -= amount
     await userData.save()
@@ -128,10 +132,9 @@ export const withdraw = async (req,res) => {
 
 
     res.status(200).json({
-      message: "Ok",
+      message: "Withdraw success",
       data,
      
-
     })
   } catch (error) {
     console.log(error)
@@ -167,6 +170,59 @@ export const updateWithdraw = async (req,res) => {
 export const getWithdrawals = async (req, res) => {
   try {
     const data = await withdrawSchema.find();
+    if (!data) res.send("data is not found");
+
+    res.status(200).json({
+      message: "ok",
+      data
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+// get deposites
+
+export const getDeposites = async (req, res) => {
+  try {
+    const data = await depositSchema.find();
+    if (!data) res.send("data is not found");
+
+    res.status(200).json({
+      message: "ok",
+      data
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+
+// get withdrawals by ids
+
+export const getUserWithdrawalsById = async (req, res) => {
+  const id = req.user.userId
+  try {
+    // const {id} = req.params
+    const data = await withdrawSchema.find({userId:id})
+    if (!data) res.send("data is not found");
+ 
+    res.status(200).json({
+      message: "ok",
+      data
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+// get deposites by ids
+
+export const getUserDepositesById = async (req, res) => {
+  try {
+        const id = req.user.userId
+
+
+    const data = await depositSchema.find({userId:id})
     if (!data) res.send("data is not found");
 
     res.status(200).json({
