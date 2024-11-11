@@ -179,7 +179,7 @@ export const updateWithdraw = async (req,res) => {
 
 export const getWithdrawals = async (req, res) => {
   try {
-    const data = await withdrawSchema.find();
+    const data = await withdrawSchema.find().sort({createdAt:-1})
     if (!data) res.send("data is not found");
 
     res.status(200).json({
@@ -194,7 +194,7 @@ export const getWithdrawals = async (req, res) => {
 
 export const getDeposites = async (req, res) => {
   try {
-    const data = await depositSchema.find();
+    const data = await depositSchema.find().sort({createdAt:-1})
     if (!data) res.send("data is not found");
 
     res.status(200).json({
@@ -214,7 +214,7 @@ export const getUserWithdrawalsById = async (req, res) => {
   const id = req.user.userId
   try {
     // const {id} = req.params
-    const data = await withdrawSchema.find({userId:id})
+    const data = await withdrawSchema.find({userId:id}).sort({createdAt:-1})
     if (!data) res.send("data is not found");
  
     res.status(200).json({
@@ -233,7 +233,7 @@ export const getUserDepositesById = async (req, res) => {
 
 
 
-    const data = await depositSchema.find({userId:id})
+    const data = await depositSchema.find({userId:id}).sort({createdAt:-1})
     if (!data) res.send("data is not found");
 
     res.status(200).json({

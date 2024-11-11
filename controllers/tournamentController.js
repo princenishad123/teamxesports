@@ -5,7 +5,7 @@ import userSchema from "../model/userSchema.js";
 
 export const getTournaments = async (req,res) => {
     try {
-        const tournaments = await tournamentSchema.find();
+        const tournaments = await tournamentSchema.find().sort({createdAt:-1})
         if (!tournaments) res.json({ message: "tournaments not found" });
 
         res.status(200).json({
@@ -155,7 +155,7 @@ export const getLiveTournaments= async (req,res) => {
 
 // create tournament controllers
 export const tournamentController = async (req, res) => {
-    const { name, entryFee, maxTeams, startDate, endDate, map, isCompleted, } = req.body;
+    const { name, entryFee, maxTeams, startDate, endDate, map, isCompleted,winners,boats } = req.body;
     const userId  = req.user.userId
     try {
         // validations

@@ -92,7 +92,7 @@ export const loginController = async (req, res) => {
 export const getUsers = async (req, res) => {
     try {
 
-        const users = await userSchema.find();
+        const users = await userSchema.find().sort({createdAt:-1})
 
         if (!users) res.json({ message: "User not found" });
 

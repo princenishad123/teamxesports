@@ -56,6 +56,10 @@ export const tournamentSchema = new mongoose.Schema({
   winners: {
     type : Number,
   },
+  boats: {
+    type: Number,
+    default:0
+  },
   teams: [
 
      {
