@@ -18,6 +18,11 @@ const depositSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    status: {
+        type: String,
+        enum: ["Success", "Failed"],
+        default:"Success"
+    },
      
     userId:{
         type: mongoose.Schema.Types.ObjectId,

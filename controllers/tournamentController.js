@@ -87,13 +87,14 @@ export const getTournamentsDetailsById = async (req,res) => {
         if (!tournaments) res.json({ message: "tournaments not found" });
 
         const a = tournaments.teams.map((e) => e)
+  
         
         const users = await userSchema.find({ _id: { $in: a } })
         
+console.log(users)
 
 
-
-        res.status(200).json({
+      return  res.status(200).json({
             success: "Ok",
             tournaments,
             users
@@ -232,6 +233,50 @@ export const registerTeam = async (req, res) => {
     }
 }
 
+export const updateTournament = async (req, res) => {
+    try {
+        const { id,isCompleted } = req.body;
+
+        if (!id) return res.json({ message: "id required" });
+
+        const tournament = await tournamentSchema.updateOne({_id:id},{$set:{isCompleted}})
+
+        return res.status(200).json({
+            message: "Tournament Updated"
+            
+        })
+        
+    } catch (error) {
+        return res.json({
+            message: "server Error",
+            error
+        })
+    }
+    
+}
+
+
+export const deleteTournament = async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) return res.json({ message: "id required" });
+
+        const tournament = await tournamentSchema.deleteOne({_id:id})
+
+        return res.status(200).json({
+            message: "Tournament Deleted"
+            
+        })
+        
+    } catch (error) {
+        return res.json({
+            message: "server Error",
+            error
+        })
+    }
+    
+}
 
 
 

@@ -99,8 +99,8 @@ const verifyOtp = async (req, res) => {
             })
         }
         
-    } catch (error) {
-       res.send(error.message)
+  } catch (error) {
+     return  res.send(error.message)
     }
 }
 

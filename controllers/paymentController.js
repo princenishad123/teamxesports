@@ -59,7 +59,8 @@ export const verifyPayment = async (req, res) => {
         balance: amount,
         type: "razorpay",
         orderNumber: razorpay_order_id,
-        userId:userId
+        userId: userId,
+      
       })
       
       await saveDeposit.save()
@@ -70,6 +71,15 @@ export const verifyPayment = async (req, res) => {
         });
     } else {
       // Payment verification failed
+       const saveDeposit = new depositSchema({
+        balance: amount,
+        type: "razorpay",
+        orderNumber: razorpay_order_id,
+        userId: userId,
+        status:"Failed"
+      })
+      
+      await saveDeposit.save()
       return res.status(400).json({ error: "Payment verification failed" });
     }
   } catch (error) {
@@ -220,6 +230,7 @@ export const getUserWithdrawalsById = async (req, res) => {
 export const getUserDepositesById = async (req, res) => {
   try {
         const id = req.user.userId
+
 
 
     const data = await depositSchema.find({userId:id})

@@ -53,6 +53,9 @@ export const tournamentSchema = new mongoose.Schema({
     enum: ['true', 'false'],
     default: false
   },
+  winners: {
+    type : Number,
+  },
   teams: [
 
      {
